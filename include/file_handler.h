@@ -1,24 +1,22 @@
 #pragma once
 
 #ifndef FILE_HANDLER_H
-  #define FILE_HANDLER_H
+#define FILE_HANDLER_H
 
-  #include <vector>
-  #include <string>
-  #include <sstream>
+#include <sstream>
+#include <string>
+#include <vector>
 
-  struct WindShield {
-    std::string root_path;
-    std::string include_path;
-  };
+std::vector<std::string> read_config();
 
-  struct FuncDec {
-    std::string declaration;
-    std::string destination;
-  };
+struct FuncDec {
+  std::string declaration;
+  std::string destination;
+};
 
-  std::vector<FuncDec> function_declaration(const std::string&);
+std::vector<FuncDec> function_declaration(const std::string &);
 
-  void new_header(FuncDec, std::string);
-  void append_header(FuncDec);
+void new_header(FuncDec &, std::string);
+void append_header(FuncDec &);
+
 #endif // FILE_HANDLER_H
