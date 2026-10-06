@@ -1,2 +1,2 @@
 // #ws test.h
-void test(int* test)
+void test(int* test);
