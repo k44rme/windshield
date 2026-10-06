@@ -19,6 +19,6 @@
 
   std::vector<FuncDec> function_declaration(const std::string&);
 
-  void new_header(std::string, std::string, std::string);
-  void append_header(std::string, std::string);
+  void new_header(FuncDec, std::string);
+  void append_header(FuncDec);
 #endif // FILE_HANDLER_H

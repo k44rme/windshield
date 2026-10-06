@@ -17,7 +17,7 @@ std::vector<FuncDec> function_declaration(const std::string& file_name)
 
     if(!f)
     {
-      std::cerr << "Failed to open file: " << file_name << std::endl;
+      std::cerr << "\nError: Failed to open requested file\nFile: " << file_name << std::endl;
       exit(EXIT_FAILURE);
     }
     
@@ -37,17 +37,24 @@ std::vector<FuncDec> function_declaration(const std::string& file_name)
           
           std::string next;
           if (std::getline(f, next)) {
+            if (next[next.size()-1] == '{')
+            {
+              next[next.size()-1] = ';';
+            }
+            else if (next[next.size()-1] == ')') {
+              next.push_back(';');
+            }
             current.declaration = next;
           } else {
-            throw std::runtime_error(file_name+": Failed to find the function declaration");
+            throw std::runtime_error("\nError: Failed to find the function declaration in "+file_name);
           }
 
           functions.push_back(current);
         }
-        else std::cout << file_name << ": Incorrect file structure!" << std::endl;
+        else std::cout << "\nError: " << file_name << "has incorect structure" << std::endl;
       }
       else {
-        std::cout << file_name << ": File is empty" << std::endl;
+        std::cout << "\nError: " << file_name << "is empty" << std::endl;
       }
     }
 
@@ -56,24 +63,28 @@ std::vector<FuncDec> function_declaration(const std::string& file_name)
   return functions;
 }
 
-void new_header(std::string destination, std::string content, std::string definition)
+void new_header(FuncDec obj, std::string definition)
 {
-  std::ofstream header(destination);
+  std::ofstream header(obj.destination);
+  if (!header) {
+    std::cout << "\nError: Requested destination is invalid.\nDestination: " << obj.destination << std::endl;
+    exit(EXIT_FAILURE);
+  }
   header << "#pragam once\n\n#ifndef " << definition << "\n#define " << definition << "\n\n// #ws declarations\n";
-  header << content;
+  header << obj.declaration;
   header << "// #ws declaration end";
   header << "\n\n#endif // " << definition << "\n";
 }
 
-void append_header(std::string destination, std::string content)
+void append_header(FuncDec obj)
 {
   std::vector<std::string> lines;
 
   {
-    std::ifstream file(destination);
+    std::ifstream file(obj.destination);
     if (!file)
     {
-      std::cerr << "Failed to find a header";
+      std::cerr << "\nError: Failed to find a header";
       exit(EXIT_FAILURE);
     } else {
       std::string line;
@@ -85,7 +96,7 @@ void append_header(std::string destination, std::string content)
     }
   }
 
-  std::size_t start_span, end_span = lines.size();
+  std::size_t start_span = lines.size(), end_span = lines.size();
 
   for (std::size_t i; i <= lines.size()-1; i++)
   {
@@ -99,9 +110,9 @@ void append_header(std::string destination, std::string content)
     }
   }
 
-  lines.insert(lines.begin() + end_span, content);
+  lines.insert(lines.begin() + end_span, obj.declaration);
 
-  std::ofstream out(destination, std::ios::trunc);
+  std::ofstream out(obj.destination, std::ios::trunc);
   if (out) {
     for (auto current : lines)
     {

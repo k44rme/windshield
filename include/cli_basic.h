@@ -1,11 +1,11 @@
 #pragma once
 
-#ifndef #CLI_BASIC_H
-#define #CLI_BASIC_H
+#ifndef CLI_BASIC_H
+  #define CLI_BASIC_H
 
-// #ws declaration
-void test()
-void test(int test_num)
-// #ws declaration end
+  #include <string>
+
+  void gen(const std::string&);
+  void version();
 
 #endif // CLI_BASIC_H

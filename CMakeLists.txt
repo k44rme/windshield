@@ -7,5 +7,6 @@ set(CMAKE_CXX_STANDART 23)
 project(${NAME} VERSION ${VERSION})
 add_executable(${NAME}
                 src/main.cpp
-                src/file_handler.cpp)
+                src/file_handler.cpp
+                src/cli_manager.cpp)
 target_include_directories(${NAME} PUBLIC ${PROJECT_SOURCE_DIR}/include)
