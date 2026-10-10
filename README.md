@@ -59,3 +59,6 @@ windshield gen test/test.cpp
 ```
 
 Windshield will read test.cpp file, bring function declarations from it and write into the header file.
+
+# License
+MIT
