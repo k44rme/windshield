@@ -76,7 +76,6 @@ void new_header(FuncDec &obj, string definition) {
     } else if (!header.is_open()) {
       runtime_error("\nError: Failed to open file: " + obj.destination);
     } else {
-      cout << "\n[Debug] Writing content to the new header ... " << endl;
       header << "#pragma once\n\n"
              << "#ifndef " << definition << "\n"
              << "#define " << definition << "\n\n"
