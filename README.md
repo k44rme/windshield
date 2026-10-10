@@ -42,6 +42,21 @@ And check, that windshield have built successfully:
 ./build/windshield version
 ```
 
+### 1.5 Create alias for windshield
+Bonus section. In this section, we will create windshield alias for bash.
+
+Copy executable windshield file into /usr/bin
+
+```bash
+cp [path to windshield dir]/build/windshield /usr/bin
+```
+
+Now, you can use it:
+
+```bash
+windshield -v
+```
+
 ### 2. Initialize windshield
 
 Type this, to initialize windshield:
