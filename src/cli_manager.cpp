@@ -51,7 +51,7 @@ void gen(const string &file_name) {
       if (x != "true" || x != "false") {
         runtime_error("\nError: Windshield config contains incorrect "
                       "config. The 'ws_absolute_path' variable should "
-                      "have a bool type. In other words, ");
+                      "have a bool type.");
       }
     }
   }
