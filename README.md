@@ -1,10 +1,10 @@
 # Description
 
-Windshield is a simple cli-based generator, which helps C/C++ programmers to generate header files. First of all, you need to initialize windshield, using 'windshield init' command.
+Windshield is a simple cli-based generator, which helps C/C++ programmers to generate header files.
 
 ## Try it yourself
 
-You can try windshield by yourself. In order to do it make those steps:
+You can try windshield by yourself. In order to do it, make those steps:
 
 ### 1. Download windshield
 
@@ -21,6 +21,8 @@ Then, go the project path:
 ```bash
 cd windshield
 ```
+> [!warning]
+> Before run next command, make sure, that you have C/C++ compilers in your computer. And install cmake in your computer
 
 Now, compile it:
 
@@ -28,10 +30,16 @@ Now, compile it:
 cmake -S . -B build
 ```
 
-Now, you can use it by typing:
+And build:
 
 ```bash
-./build/windhsield [COMMAND]
+cmake --build build
+```
+
+And check, that windshield have built successfully:
+
+```bash
+./build/windshield version
 ```
 
 ### 2. Initialize windshield
