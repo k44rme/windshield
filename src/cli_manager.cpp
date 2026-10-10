@@ -1,14 +1,19 @@
 #include <cctype>
+#include <cstddef>
 #include <filesystem>
 #include <iostream>
+#include <stdexcept>
 #include <string>
 #include <vector>
 
 #include "../include/cli_basic.h"
 #include "../include/file_handler.h"
 
-std::string generate_definition(const std::string &name) {
-  std::string result = name;
+using std::cout, std::endl, std::runtime_error;
+using std::string, std::vector, std::size_t, std::filesystem::path;
+
+string generate_definition(const string &name) {
+  string result = name;
 
   for (char &c : result) {
     c = static_cast<char>(std::toupper(static_cast<unsigned char>(c)));
@@ -21,48 +26,61 @@ std::string generate_definition(const std::string &name) {
   return result;
 }
 
-void gen(const std::string &file_name) {
-  std::cout << "Starting to read recived file ... ";
-  std::vector<FuncDec> functions = function_declaration(file_name);
-  std::filesystem::path path = file_name;
-  std::string name = path.stem().string();
+void gen(const string &file_name) {
+  cout << "Starting to read recived file ... ";
+  vector<FuncDec> functions = function_declaration(file_name);
+  path path = file_name;
+  string name = path.stem().string();
+  bool absolute_path = true;
+  bool add_include_path = true;
 
-  std::vector<std::string> config = read_config();
-  std::string include;
+  vector<string> config = read_config();
+  string include;
   for (size_t i = 0; i < config.size(); i++) {
     if (config[i].find("include_path = ") == 0) {
-      std::string temp = "include_path = '";
+      string temp = "include_path = '";
       include = config[i].substr(temp.size());
       if (include.back() == '\'')
         include.pop_back();
+    }
 
-      break;
+    if (config[i].find("ws_absolute_path") == 0) {
+      string temp = "ws_absolute_path = ", x;
+      x = config[i].substr(temp.size());
+
+      if (x != "true" || x != "false") {
+        runtime_error("\nError: Windshield config contains incorrect "
+                      "config. The 'ws_absolute_path' variable should "
+                      "have a bool type. In other words, ");
+      }
     }
   }
 
-  std::cout << "done" << std::endl;
+  cout << "done" << endl;
 
-  std::cout << "Writing data ... ";
+  cout << "Writing data ... ";
   for (std::size_t i = 0; i < functions.size(); i++) {
-    functions[i].destination.insert(0, include);
-    if (std::filesystem::path(functions[i].destination).is_relative()) {
-      functions[i].destination.insert(0, "/");
-      functions[i].destination.insert(0,
-                                      std::filesystem::current_path().string());
+    if (add_include_path) {
+      functions[i].destination.insert(0, include);
     }
-    std::cout << "\n[Debug] Destination: " << functions[i].destination
-              << std::endl;
+    if (absolute_path) {
+      if (std::filesystem::path(functions[i].destination).is_relative()) {
+        functions[i].destination.insert(0, "/");
+        functions[i].destination.insert(
+            0, std::filesystem::current_path().string());
+      }
+    }
     if (std::filesystem::exists(functions[i].destination)) {
       append_header(functions[i]);
     } else {
       new_header(functions[i], generate_definition(name));
     }
   }
-  std::cout << "done" << std::endl;
+  cout << "done" << endl;
 }
 
 void version() {
-  std::cout << "Windshield 1.0.0\nCreated by k44rme\nRespository: "
-               "https://github.com/k44rme/windshield"
-            << std::endl;
+  cout << "Windshield 1.0.0\nCreated by k44rme\nRespository: "
+          "https://github.com/k44rme/windshield"
+       << endl;
 }

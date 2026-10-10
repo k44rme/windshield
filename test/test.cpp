@@ -1,2 +1,5 @@
-// #ws file_handler.h
+// #ws test.h
 void test();
+
+// #ws test.h
+void new_test(char *);
